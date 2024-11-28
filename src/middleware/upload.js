@@ -14,12 +14,12 @@ const storage = multer.diskStorage({
 
 const upload = multer({
     storage,
-    limits: { fileSize: 10 * 1024 * 1024 }, // Limite : 10 Mo
+    limits: { fileSize: 10 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
+        console.log('File:', file); // Log file details
         const allowedFileTypes = /jpeg|jpg|png|pdf|docx/;
         const extname = allowedFileTypes.test(path.extname(file.originalname).toLowerCase());
         const mimeType = allowedFileTypes.test(file.mimetype);
-
         if (extname && mimeType) {
             cb(null, true);
         } else {
@@ -27,6 +27,7 @@ const upload = multer({
         }
     },
 });
+
 
 // Gestion des erreurs spécifiques à multer
 const handleMulterError = (err, req, res, next) => {

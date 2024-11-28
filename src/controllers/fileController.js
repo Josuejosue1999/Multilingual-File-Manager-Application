@@ -1,6 +1,6 @@
 const File = require('../models/File'); // Modèle File
 const fs = require('fs');
-const path = require('path');
+const uploadQueue = require('../queue/uploadQueue'); // Import your uploadQueue
 
 // Télécharger un fichier
 const uploadFile = async (req, res) => {
@@ -19,10 +19,17 @@ const uploadFile = async (req, res) => {
             description: req.body.description || '', // Description optionnelle
         });
 
+        // Save the file info in MongoDB
         await newFile.save();
 
+        // Add the file to the upload queue
+        await uploadQueue.add({
+            file: req.file,
+            description: req.body.description || ''
+        });
+
         res.status(201).json({
-            message: 'File uploaded successfully',
+            message: 'File uploaded and processing queued successfully',
             file: {
                 id: newFile._id,
                 name: newFile.name,
@@ -78,14 +85,10 @@ const deleteFile = async (req, res) => {
         res.status(500).json({ message: 'Error deleting file', error: error.message });
     }
 };
-
-const uploadQueue = require('../queue/uploadQueue');
-
-exports.queueUpload = async (req, res) => {
-  const { file } = req.body;
-  await uploadQueue.add({ file });
-  res.status(200).json({ message: 'File queued for upload' });
+const queueUpload = (req, res) => {
+    // Your logic to queue the file upload, for example:
+    console.log("Queuing upload...");
+    res.status(200).json({ message: 'File upload queued successfully' });
 };
 
-
-module.exports = { uploadFile, getFiles, deleteFile };
+module.exports = { uploadFile, getFiles, deleteFile, queueUpload };

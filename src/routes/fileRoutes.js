@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { uploadFile, getFiles, deleteFile } = require('../controllers/fileController');
-const { upload, handleMulterError } = require('../middleware/upload'); // Middleware pour gérer les fichiers
 
-// Route POST pour télécharger un fichier
+// Import the controller at the top
+const { uploadFile, getFiles, deleteFile, queueUpload } = require('../controllers/fileController');
+const { upload, handleMulterError } = require('../middleware/upload'); // Middleware for file handling
+
+// POST route for file upload
 router.post(
     '/upload',
     (req, res, next) => {
@@ -11,7 +13,7 @@ router.post(
         next();
     },
     upload.single('file'),
-    handleMulterError, // Gestion des erreurs spécifiques à Multer
+    handleMulterError, // Handle specific Multer errors
     (req, res, next) => {
         if (!req.file) {
             console.error('[ERROR] No file uploaded');
@@ -19,34 +21,30 @@ router.post(
         }
         next();
     },
-    uploadFile
+    uploadFile // Call the controller method
 );
 
-// Route GET pour obtenir tous les fichiers
+// GET route for fetching all files
 router.get(
     '/',
     (req, res, next) => {
         console.log('[INFO] GET /api/files called');
         next();
     },
-    getFiles
+    getFiles // Call the controller method to fetch files
 );
 
-// Route DELETE pour supprimer un fichier spécifique
+// DELETE route for deleting a specific file
 router.delete(
     '/:id',
     (req, res, next) => {
         console.log(`[INFO] DELETE /api/files/${req.params.id} called`);
         next();
     },
-    deleteFile
+    deleteFile // Call the controller method to delete file
 );
 
-const express = require('express');
-const fileController = require('../controllers/fileController');
-
-router.post('/queue', fileController.queueUpload);
-
-module.exports = router;
+// POST route for file queueing (optional feature)
+router.post('/queue', queueUpload); // Ensure this route is defined in your controller
 
 module.exports = router;
