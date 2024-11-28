@@ -1,234 +1,265 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Multilingual File Manager API",
-        "version": "1.0.0",
-        "description": "API for managing files with multilingual support, user authentication, and CRUD operations for files."
+      "title": "Multilingual File Manager API",
+      "version": "1.0.0",
+      "description": "API for managing files with multilingual support, user authentication, and CRUD operations for files."
     },
     "servers": [
-        {
-            "url": "http://localhost:5000",
-            "description": "Local development server"
-        }
+      {
+        "url": "http://localhost:5000",
+        "description": "Local development server"
+      }
     ],
     "paths": {
-        "/api/auth/register": {
-            "post": {
-                "summary": "Register a new user",
-                "description": "Creates a new user account with a unique username, email, and password.",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "username": {
-                                        "type": "string",
-                                        "example": "john_doe"
-                                    },
-                                    "password": {
-                                        "type": "string",
-                                        "example": "securepassword123"
-                                    },
-                                    "email": {
-                                        "type": "string",
-                                        "example": "john@example.com"
-                                    }
-                                },
-                                "required": ["username", "password", "email"]
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "User registered successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "message": { "type": "string" },
-                                        "user": {
-                                            "type": "object",
-                                            "properties": {
-                                                "id": { "type": "string" },
-                                                "username": { "type": "string" },
-                                                "email": { "type": "string" }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+      "/api/auth/register": {
+        "post": {
+          "summary": "Register a new user",
+          "description": "Creates a new user account with a unique username, email, and password.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "username": {
+                      "type": "string",
+                      "example": "john_doe"
                     },
-                    "400": { "description": "Bad request - Missing fields or invalid data" },
-                    "500": { "description": "Internal server error" }
-                }
-            }
-        },
-        "/api/auth/login": {
-            "post": {
-                "summary": "Log in a user",
-                "description": "Authenticates a user and returns their details if the credentials are valid.",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "username": {
-                                        "type": "string",
-                                        "example": "john_doe"
-                                    },
-                                    "password": {
-                                        "type": "string",
-                                        "example": "securepassword123"
-                                    }
-                                },
-                                "required": ["username", "password"]
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Login successful",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "message": { "type": "string" },
-                                        "user": {
-                                            "type": "object",
-                                            "properties": {
-                                                "id": { "type": "string" },
-                                                "username": { "type": "string" },
-                                                "email": { "type": "string" }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                    "password": {
+                      "type": "string",
+                      "example": "securepassword123"
                     },
-                    "401": { "description": "Invalid credentials" },
-                    "404": { "description": "User not found" },
-                    "500": { "description": "Internal server error" }
-                }
-            }
-        },
-        "/api/files": {
-            "get": {
-                "summary": "Get all files",
-                "description": "Retrieves a list of all files uploaded by users.",
-                "responses": {
-                    "200": {
-                        "description": "A list of files",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "files": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "id": { "type": "string" },
-                                                    "name": { "type": "string" },
-                                                    "path": { "type": "string" },
-                                                    "mimeType": { "type": "string" },
-                                                    "size": { "type": "integer" },
-                                                    "description": { "type": "string" }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "500": { "description": "Internal server error" }
-                }
-            }
-        },
-        "/api/files/upload": {
-            "post": {
-                "summary": "Upload a file",
-                "description": "Uploads a new file. Accepts a single file in `multipart/form-data` format.",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "file": {
-                                        "type": "string",
-                                        "format": "binary"
-                                    },
-                                    "description": {
-                                        "type": "string",
-                                        "example": "This is a sample file"
-                                    }
-                                }
-                            }
-                        }
+                    "email": {
+                      "type": "string",
+                      "example": "john@example.com"
                     }
-                },
-                "responses": {
-                    "200": {
-                        "description": "File uploaded successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "message": { "type": "string" },
-                                        "file": {
-                                            "type": "object",
-                                            "properties": {
-                                                "id": { "type": "string" },
-                                                "name": { "type": "string" },
-                                                "path": { "type": "string" },
-                                                "mimeType": { "type": "string" },
-                                                "size": { "type": "integer" },
-                                                "description": { "type": "string" }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                  },
+                  "required": ["username", "password", "email"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "User registered successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": { "type": "string" },
+                      "user": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "string" },
+                          "username": { "type": "string" },
+                          "email": { "type": "string" }
                         }
-                    },
-                    "400": { "description": "Bad request - File missing or invalid" },
-                    "500": { "description": "Internal server error" }
-                }
-            }
-        },
-        "/api/files/{id}": {
-            "delete": {
-                "summary": "Delete a file by ID",
-                "description": "Deletes a specific file by its unique ID.",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "description": "The unique ID of the file to delete",
-                        "schema": { "type": "string" }
+                      }
                     }
-                ],
-                "responses": {
-                    "200": { "description": "File deleted successfully" },
-                    "404": { "description": "File not found" },
-                    "500": { "description": "Internal server error" }
+                  }
                 }
-            }
+              }
+            },
+            "400": { "description": "Bad request - Missing fields or invalid data" },
+            "500": { "description": "Internal server error" }
+          }
         }
+      },
+      "/api/auth/login": {
+        "post": {
+          "summary": "Log in a user",
+          "description": "Authenticates a user and returns their details if the credentials are valid.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "username": {
+                      "type": "string",
+                      "example": "john_doe"
+                    },
+                    "password": {
+                      "type": "string",
+                      "example": "securepassword123"
+                    }
+                  },
+                  "required": ["username", "password"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Login successful",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": { "type": "string" },
+                      "user": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "string" },
+                          "username": { "type": "string" },
+                          "email": { "type": "string" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": { "description": "Invalid credentials" },
+            "404": { "description": "User not found" },
+            "500": { "description": "Internal server error" }
+          }
+        }
+      },
+      "/api/files": {
+        "get": {
+          "summary": "Get all files",
+          "description": "Retrieves a list of all files uploaded by users.",
+          "responses": {
+            "200": {
+              "description": "A list of files",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "files": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": { "type": "string" },
+                            "name": { "type": "string" },
+                            "path": { "type": "string" },
+                            "mimeType": { "type": "string" },
+                            "size": { "type": "integer" },
+                            "description": { "type": "string" }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": { "description": "Internal server error" }
+          }
+        }
+      },
+      "/api/files/upload": {
+        "post": {
+          "summary": "Upload a file",
+          "description": "Uploads a new file. Accepts a single file in `multipart/form-data` format. Includes optional file description.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "file": {
+                      "type": "string",
+                      "format": "binary"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "This is a sample file"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "File uploaded successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": { "type": "string" },
+                      "file": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "string" },
+                          "name": { "type": "string" },
+                          "path": { "type": "string" },
+                          "mimeType": { "type": "string" },
+                          "size": { "type": "integer" },
+                          "description": { "type": "string" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": { "description": "Bad request - File missing or invalid" },
+            "500": { "description": "Internal server error" }
+          }
+        }
+      },
+      "/api/files/{id}": {
+        "delete": {
+          "summary": "Delete a file by ID",
+          "description": "Deletes a specific file by its unique ID.",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "description": "The unique ID of the file to delete",
+              "schema": { "type": "string" }
+            }
+          ],
+          "responses": {
+            "200": { "description": "File deleted successfully" },
+            "404": { "description": "File not found" },
+            "500": { "description": "Internal server error" }
+          }
+        }
+      },
+      "/api/files/{id}/download": {
+        "get": {
+          "summary": "Download a file by ID",
+          "description": "Downloads a specific file by its unique ID.",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "description": "The unique ID of the file to download",
+              "schema": { "type": "string" }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "File downloaded successfully",
+              "content": {
+                "application/octet-stream": {
+                  "schema": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            },
+            "404": { "description": "File not found" },
+            "500": { "description": "Internal server error" }
+          }
+        }
+      }
     }
-}
+  }
+  

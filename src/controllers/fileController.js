@@ -79,4 +79,13 @@ const deleteFile = async (req, res) => {
     }
 };
 
+const uploadQueue = require('../queue/uploadQueue');
+
+exports.queueUpload = async (req, res) => {
+  const { file } = req.body;
+  await uploadQueue.add({ file });
+  res.status(200).json({ message: 'File queued for upload' });
+};
+
+
 module.exports = { uploadFile, getFiles, deleteFile };

@@ -42,4 +42,11 @@ router.delete(
     deleteFile
 );
 
+const express = require('express');
+const fileController = require('../controllers/fileController');
+
+router.post('/queue', fileController.queueUpload);
+
+module.exports = router;
+
 module.exports = router;
