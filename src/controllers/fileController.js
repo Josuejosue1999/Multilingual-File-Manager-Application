@@ -2,31 +2,31 @@ const File = require('../models/File'); // Modèle File
 const fs = require('fs');
 const uploadQueue = require('../queue/queue'); // Import your uploadQueue
 
-// Télécharger un fichier
+
 const uploadFile = async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ message: 'No file uploaded' });
         }
+        console.log(uploadQueue);  // Check if queue has the 'add' method
 
-        // Création d'une entrée pour le fichier dans MongoDB
-        const newFile = new File({
-            user: req.user ? req.user._id : null, // Si un utilisateur est connecté
-            name: req.file.originalname,
-            path: req.file.path,
-            mimeType: req.file.mimetype,
-            size: req.file.size,
-            description: req.body.description || '', // Description optionnelle
-        });
-
-        // Save the file info in MongoDB
-        await newFile.save();
-
-        // Add the file to the upload queue
+        // Add the file upload task to the queue
         await uploadQueue.add({
             file: req.file,
             description: req.body.description || ''
         });
+
+        // Save the file information to the database
+        const newFile = new File({
+            user: req.user ? req.user._id : null,  // If a user is logged in
+            name: req.file.originalname,
+            path: req.file.path,
+            mimeType: req.file.mimetype,
+            size: req.file.size,
+            description: req.body.description || '',
+        });
+
+        await newFile.save();
 
         res.status(201).json({
             message: 'File uploaded and processing queued successfully',
@@ -39,6 +39,7 @@ const uploadFile = async (req, res) => {
                 description: newFile.description,
             },
         });
+
     } catch (error) {
         console.error(`[ERROR] Uploading file: ${error.message}`);
         res.status(500).json({ message: 'Error uploading file', error: error.message });
@@ -91,4 +92,15 @@ const queueUpload = (req, res) => {
     res.status(200).json({ message: 'File upload queued successfully' });
 };
 
-module.exports = { uploadFile, getFiles, deleteFile, queueUpload };
+const processFile = async (filePath, description) => {
+    try {
+      // Implement your file processing logic here
+      console.log(`Processing file at ${filePath} with description: ${description}`);
+      // Example: You could move it to a cloud storage or perform additional checks
+    } catch (error) {
+      console.error('Error during file processing:', error);
+      throw error;
+    }
+  };
+  
+module.exports = { uploadFile, getFiles, deleteFile, queueUpload, processFile };
