@@ -3,7 +3,7 @@
     "info": {
         "title": "Multilingual File Manager API",
         "version": "1.0.0",
-        "description": "API for managing files with multilingual support, user authentication, and CRUD operations for files."
+        "description": "An API for managing user files with multilingual support, user authentication, and CRUD operations for files."
     },
     "servers": [
         {
@@ -109,7 +109,8 @@
                                                 "username": { "type": "string" },
                                                 "email": { "type": "string" }
                                             }
-                                        }
+                                        },
+                                        "redirectUrl": { "type": "string" }
                                     }
                                 }
                             }
@@ -166,14 +167,17 @@
                         "multipart/form-data": {
                             "schema": {
                                 "type": "object",
+                                "required": ["file"],
                                 "properties": {
                                     "file": {
                                         "type": "string",
-                                        "format": "binary"
+                                        "format": "binary",
+                                        "description": "The file to be uploaded (e.g., JPEG, PNG, PDF)."
                                     },
                                     "description": {
                                         "type": "string",
-                                        "example": "This is a sample file"
+                                        "example": "This is a sample file",
+                                        "description": "Optional description of the file."
                                     }
                                 }
                             }
@@ -181,7 +185,7 @@
                     }
                 },
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "File uploaded successfully",
                         "content": {
                             "application/json": {

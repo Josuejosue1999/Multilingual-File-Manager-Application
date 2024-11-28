@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const path = require('path'); // Pour gérer les chemins de fichiers
+const fs = require('fs'); // Import manquant pour gérer les fichiers
 const connectDB = require('../config/db');
 const i18next = require('i18next');
 const i18nextMiddleware = require('i18next-http-middleware');
@@ -25,7 +26,12 @@ const app = express();
 app.use(helmet());
 
 // Activer CORS pour permettre les requêtes inter-origines
-app.use(cors());
+const corsOptions = {
+    origin: '*', // Permet toutes les origines (modifiez pour production)
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+};
+app.use(cors(corsOptions));
 
 // Journalisation des requêtes pour le diagnostic
 app.use((req, res, next) => {
@@ -71,9 +77,21 @@ app.use((err, req, res, next) => {
     res.status(500).json({ message: 'Internal server error', error: err.message });
 });
 
+// Vérification des fichiers téléchargés manquants
+const verifyUploadedFiles = () => {
+    const uploadsPath = path.join(__dirname, '../uploads');
+    if (!fs.existsSync(uploadsPath)) {
+        console.log('[INFO] Uploads directory does not exist. Creating...');
+        fs.mkdirSync(uploadsPath);
+    }
+    console.log('[INFO] Uploads directory verified.');
+};
+
 // Démarrer le serveur
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
     console.log(`Swagger documentation available at http://localhost:${PORT}/api-docs`);
+
+    verifyUploadedFiles();
 });
