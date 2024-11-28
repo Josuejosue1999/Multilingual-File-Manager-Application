@@ -1,6 +1,6 @@
 const File = require('../models/File'); // Modèle File
 const fs = require('fs');
-const uploadQueue = require('../queue/uploadQueue'); // Import your uploadQueue
+const uploadQueue = require('../queue/queue'); // Import your uploadQueue
 
 // Télécharger un fichier
 const uploadFile = async (req, res) => {
