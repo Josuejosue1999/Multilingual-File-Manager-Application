@@ -96,7 +96,7 @@ Start the server:
 bash
 Copy code
 npm start
-The API will be accessible at http://localhost:5000.
+The API will be accessible at [http://localhost:5000](http://localhost:5000/api-docs).
 
 Technologies Used
 Node.js with Express for API development.
