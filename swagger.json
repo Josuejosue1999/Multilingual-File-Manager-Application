@@ -151,17 +151,14 @@
                         "multipart/form-data": {
                             "schema": {
                                 "type": "object",
-                                "required": ["file"],
                                 "properties": {
                                     "file": {
                                         "type": "string",
-                                        "format": "binary",
-                                        "description": "The file to be uploaded (e.g., JPEG, PNG, PDF)."
+                                        "format": "binary"
                                     },
                                     "description": {
                                         "type": "string",
-                                        "example": "This is a sample file",
-                                        "description": "Optional description of the file."
+                                        "example": "This is a sample file"
                                     }
                                 }
                             }
@@ -169,7 +166,7 @@
                     }
                 },
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "File uploaded successfully",
                         "content": {
                             "application/json": {

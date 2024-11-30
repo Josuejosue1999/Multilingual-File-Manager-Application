@@ -6,7 +6,6 @@ const uploadQueue = require('../queues/uploadQueue'); // Importing the queue
 const uploadFile = async (req, res) => {
     try {
         if (!req.file) {
-            console.warn('[WARNING] No file received in the request');
             return res.status(400).json({ message: 'No file uploaded' });
         }
 
@@ -17,6 +16,7 @@ const uploadFile = async (req, res) => {
             path: req.file.path,
             mimeType: req.file.mimetype,
             size: req.file.size,
+            description: req.body.description || '',
             description: req.body.description || '',
         });
 
@@ -43,9 +43,10 @@ const uploadFile = async (req, res) => {
                 description: newFile.description,
             },
         });
+
     } catch (error) {
-        console.error(`[ERROR] Error uploading file: ${error.message}`);
-        return res.status(500).json({ message: 'Error uploading file', error: error.message });
+        console.error(`[ERROR] Uploading file: ${error.message}`);
+        res.status(500).json({ message: 'Error uploading file', error: error.message });
     }
 };
 
@@ -57,7 +58,7 @@ const getFiles = async (req, res) => {
         return res.status(200).json({ files });
     } catch (error) {
         console.error(`[ERROR] Fetching files: ${error.message}`);
-        return res.status(500).json({ message: 'Error fetching files', error: error.message });
+        res.status(500).json({ message: 'Error fetching files', error: error.message });
     }
 };
 
@@ -74,18 +75,18 @@ const deleteFile = async (req, res) => {
 
         // Delete the file from the filesystem
         if (fs.existsSync(file.path)) {
+            // Supprimer le fichier du système de fichiers
             fs.unlinkSync(file.path);
             console.log(`[INFO] File deleted from filesystem: ${file.path}`);
         }
 
         // Remove the file entry from the database
         await File.findByIdAndDelete(id);
-        console.log(`[INFO] File deleted from database: ID ${id}`);
 
-        return res.status(200).json({ message: `File with ID ${id} deleted successfully` });
+        res.status(200).json({ message: `File with ID ${id} deleted successfully` });
     } catch (error) {
         console.error(`[ERROR] Deleting file: ${error.message}`);
-        return res.status(500).json({ message: 'Error deleting file', error: error.message });
+        res.status(500).json({ message: 'Error deleting file', error: error.message });
     }
 };
 
