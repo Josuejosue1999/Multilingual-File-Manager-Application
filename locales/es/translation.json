@@ -1,0 +1,20 @@
+{
+    "welcome": "Bienvenido al gestor de archivos multilingüe",
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "logout": "Cerrar sesión",
+    "upload_file": "Subir un archivo",
+    "delete_file": "Eliminar un archivo",
+    "file_uploaded_successfully": "Archivo subido con éxito",
+    "file_deleted_successfully": "Archivo eliminado con éxito",
+    "current_language": "Idioma actual",
+    "change_language": "Cambiar idioma",
+    "username": "Nombre de usuario",
+    "password": "Contraseña",
+    "email": "Correo electrónico",
+    "description": "Descripción",
+    "submit": "Enviar",
+    "file_list": "Lista de archivos",
+    "error_occurred": "Ocurrió un error",
+    "language_updated": "Idioma actualizado con éxito"
+}

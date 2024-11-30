@@ -3,7 +3,7 @@
     "info": {
         "title": "Multilingual File Manager API",
         "version": "1.0.0",
-        "description": "An API for managing user files with multilingual support, user authentication, and CRUD operations for files."
+        "description": "An API for managing user files with multilingual support, user authentication, CRUD operations for files, and a queuing system for file uploads."
     },
     "servers": [
         {
@@ -23,18 +23,9 @@
                             "schema": {
                                 "type": "object",
                                 "properties": {
-                                    "username": {
-                                        "type": "string",
-                                        "example": "john_doe"
-                                    },
-                                    "password": {
-                                        "type": "string",
-                                        "example": "securepassword123"
-                                    },
-                                    "email": {
-                                        "type": "string",
-                                        "example": "john@example.com"
-                                    }
+                                    "username": { "type": "string", "example": "john_doe" },
+                                    "password": { "type": "string", "example": "securepassword123" },
+                                    "email": { "type": "string", "example": "john@example.com" }
                                 },
                                 "required": ["username", "password", "email"]
                             }
@@ -79,14 +70,8 @@
                             "schema": {
                                 "type": "object",
                                 "properties": {
-                                    "username": {
-                                        "type": "string",
-                                        "example": "john_doe"
-                                    },
-                                    "password": {
-                                        "type": "string",
-                                        "example": "securepassword123"
-                                    }
+                                    "username": { "type": "string", "example": "john_doe" },
+                                    "password": { "type": "string", "example": "securepassword123" }
                                 },
                                 "required": ["username", "password"]
                             }
@@ -109,8 +94,7 @@
                                                 "username": { "type": "string" },
                                                 "email": { "type": "string" }
                                             }
-                                        },
-                                        "redirectUrl": { "type": "string" }
+                                        }
                                     }
                                 }
                             }
@@ -160,7 +144,7 @@
         "/api/files/upload": {
             "post": {
                 "summary": "Upload a file",
-                "description": "Uploads a new file. Accepts a single file in `multipart/form-data` format.",
+                "description": "Uploads a new file and adds it to the processing queue.",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -233,6 +217,116 @@
                     "500": { "description": "Internal server error" }
                 }
             }
+        },
+        "/api/files/queue": {
+            "post": {
+                "summary": "Queue a file for processing",
+                "description": "Adds a file to the processing queue.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "fileId": { "type": "string", "example": "file123" },
+                                    "filePath": { "type": "string", "example": "/path/to/file.txt" },
+                                    "description": { "type": "string", "example": "File description." }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": { "description": "File queued successfully." },
+                    "500": { "description": "Internal server error." }
+                }
+            }
+        },
+        "/api/files/queue/status": {
+            "get": {
+                "summary": "Get queue status",
+                "description": "Fetches the status of the file processing queue.",
+                "responses": {
+                    "200": {
+                        "description": "Queue status retrieved successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "waiting": { "type": "array", "items": { "type": "object" } },
+                                        "active": { "type": "array", "items": { "type": "object" } },
+                                        "completed": { "type": "array", "items": { "type": "object" } },
+                                        "failed": { "type": "array", "items": { "type": "object" } }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": { "description": "Internal server error." }
+                }
+            }
+        },
+        
+        "/api/i18n/language": {
+            "get": {
+                "summary": "Get current language",
+                "description": "Returns the current language used by the user.",
+                "responses": {
+                    "200": {
+                        "description": "Current language retrieved successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "language": { "type": "string", "example": "en" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Set preferred language",
+                "description": "Sets the preferred language for the user.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "language": { "type": "string", "example": "fr" }
+                                },
+                                "required": ["language"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Language updated successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": { "type": "string" },
+                                        "language": { "type": "string" }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": { "description": "Invalid language code." },
+                    "500": { "description": "Internal server error." }
+                }
+            }
         }
     }
 }
+        
+

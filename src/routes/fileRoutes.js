@@ -1,50 +1,49 @@
 const express = require('express');
 const router = express.Router();
 
-// Import the controller at the top
-const { uploadFile, getFiles, deleteFile, queueUpload } = require('../controllers/fileController');
+// Import controller methods
+const {
+    uploadFile,
+    getFiles,
+    deleteFile,
+    queueUpload,
+    getQueueStatus,
+} = require('../controllers/fileController');
 const { upload, handleMulterError } = require('../middleware/upload'); // Middleware for file handling
 
 // POST route for file upload
 router.post(
     '/upload',
-    (req, res, next) => {
-        console.log('[INFO] POST /upload called');
-        next();
-    },
-    upload.single('file'),
-    handleMulterError, // Handle specific Multer errors
-    (req, res, next) => {
-        if (!req.file) {
-            console.error('[ERROR] No file uploaded');
-            return res.status(400).json({ message: 'No file uploaded' });
-        }
-        next();
-    },
-    uploadFile // Call the controller method
+    upload.single('file'), // Middleware to handle file uploads
+    handleMulterError, // Middleware to handle Multer-specific errors
+    uploadFile // Controller method to handle file upload
 );
 
 // GET route for fetching all files
 router.get(
     '/',
-    (req, res, next) => {
-        console.log('[INFO] GET /api/files called');
-        next();
-    },
-    getFiles // Call the controller method to fetch files
+    getFiles // Controller method to fetch files
 );
 
 // DELETE route for deleting a specific file
 router.delete(
     '/:id',
-    (req, res, next) => {
-        console.log(`[INFO] DELETE /api/files/${req.params.id} called`);
-        next();
-    },
-    deleteFile // Call the controller method to delete file
+    deleteFile // Controller method to delete file
 );
 
-// POST route for file queueing (optional feature)
-router.post('/queue', queueUpload); // Ensure this route is defined in your controller
+// POST route for queuing a file for processing
+router.post(
+    '/queue',
+    (req, res) => {
+        console.log('[INFO] POST /api/files/queue called');
+        queueUpload(req, res); // Ensure the controller method is correctly invoked
+    }
+);
+
+// GET route for retrieving queue status
+router.get(
+    '/queue/status',
+    getQueueStatus // Controller method to fetch queue status
+);
 
 module.exports = router;

@@ -1,0 +1,20 @@
+{
+    "welcome": "Bienvenue sur le gestionnaire de fichiers multilingue",
+    "login": "Connexion",
+    "register": "Inscription",
+    "logout": "Déconnexion",
+    "upload_file": "Téléverser un fichier",
+    "delete_file": "Supprimer un fichier",
+    "file_uploaded_successfully": "Fichier téléversé avec succès",
+    "file_deleted_successfully": "Fichier supprimé avec succès",
+    "current_language": "Langue actuelle",
+    "change_language": "Changer la langue",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "email": "Adresse e-mail",
+    "description": "Description",
+    "submit": "Soumettre",
+    "file_list": "Liste des fichiers",
+    "error_occurred": "Une erreur s'est produite",
+    "language_updated": "Langue mise à jour avec succès"
+}
