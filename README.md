@@ -16,7 +16,8 @@ Authentication
 Register a User
 POST /api/auth/register
 Request Body:
-
+json
+Copy code
 {
   "username": "john_doe",
   "password": "securepassword123",
@@ -25,7 +26,8 @@ Request Body:
 Log In a User
 POST /api/auth/login
 Request Body:
-
+json
+Copy code
 {
   "username": "john_doe",
   "password": "securepassword123"
@@ -33,27 +35,26 @@ Request Body:
 File Management
 Get All Files
 GET /api/files
-Retrieves a list of all files uploaded by users.
-
+Description: Retrieves a list of all files uploaded by users.
 Upload a File
 POST /api/files/upload
-Accepts multipart/form-data format.
 Request Body:
-
-{
-  "file": "<binary data>",
-  "description": "This is a sample file"
-}
+Accepts multipart/form-data format.
+Example:
+bash
+Copy code
+curl -X POST http://localhost:5000/api/files/upload \
+     -F "file=@path_to_file" \
+     -F "description=Sample file upload"
 Delete a File
 DELETE /api/files/{id}
-Path Parameter:
-
-id: The unique ID of the file to delete.
+Path Parameter: id - The unique ID of the file to delete.
 Queuing System
 Queue a File for Processing
 POST /api/files/queue
 Request Body:
-
+json
+Copy code
 {
   "fileId": "file123",
   "filePath": "/path/to/file",
@@ -61,14 +62,16 @@ Request Body:
 }
 Get Queue Status
 GET /api/files/queue/status
-Retrieves the status of the file processing queue:
-
+Description: Retrieves the status of the file processing queue.
+Status Options:
 waiting: Files waiting to be processed.
 active: Files currently being processed.
 completed: Files successfully processed.
 failed: Files that failed during processing.
 Example Usage
 Registering a User
+bash
+Copy code
 curl -X POST http://localhost:5000/api/auth/register \
      -H "Content-Type: application/json" \
      -d '{
@@ -77,6 +80,8 @@ curl -X POST http://localhost:5000/api/auth/register \
            "email": "john@example.com"
          }'
 Logging In
+bash
+Copy code
 curl -X POST http://localhost:5000/api/auth/login \
      -H "Content-Type: application/json" \
      -d '{
@@ -84,10 +89,14 @@ curl -X POST http://localhost:5000/api/auth/login \
            "password": "securepassword123"
          }'
 Uploading a File
+bash
+Copy code
 curl -X POST http://localhost:5000/api/files/upload \
      -F "file=@path_to_file" \
      -F "description=Sample file upload"
 Deleting a File
+bash
+Copy code
 curl -X DELETE http://localhost:5000/api/files/{file_id}
 Setup Instructions
 Prerequisites
@@ -97,23 +106,33 @@ Redis
 Installation
 Clone the repository:
 
-git clone https://github.com/yourusername/multilingual-file-manager-api.git
+bash
+Copy code
+git clone https://github.com/Josuejosue1999/Multilingual-File-Manager-Application
 cd multilingual-file-manager-api
 Install dependencies:
 
+bash
+Copy code
 npm install
 Set up environment variables: Create a .env file in the root directory:
 
+bash
+Copy code
 PORT=5000
-MONGO_URI=mongodb://localhost:27017/file-manager
+MONGO_URI=mongodb://localhost:27017/multilingual-file-manager
 REDIS_HOST=127.0.0.1
 REDIS_PORT=6379
 JWT_SECRET=your_secret_key
 Start the server:
 
+bash
+Copy code
 npm start
 For development mode with live reload:
 
+bash
+Copy code
 npm run dev
 Technologies Used
 Backend: Node.js with Express.js
@@ -122,10 +141,13 @@ Authentication: bcrypt for secure password hashing
 Queue System: Bull and Redis
 File Uploading: Multer
 Testing: Jest and Supertest
-API Documentation: Swagger
+API Documentation: Swagger http://localhost:5000/api-docs/
 Testing
-Run the test suite:
+Run the test suite
+To run the test suite, use the following command:
 
+bash
+Copy code
 npm test
 Tests are located in the tests folder and cover:
 
@@ -133,19 +155,21 @@ User Authentication: Registration, login, and security.
 File Management: CRUD operations.
 Queuing System: Processing and status tracking.
 Project Structure
-project/
-├── src/
-│   ├── app.js           # Entry point
-│   ├── controllers/     # Business logic
-│   ├── models/          # MongoDB schemas
-│   ├── routes/          # API endpoints
-│   ├── queues/          # Queue logic
-│   ├── middleware/      # Custom middleware
-├── tests/               # Unit tests
-├── uploads/             # Uploaded files
-├── .env                 # Environment variables
-├── package.json         # Project metadata and dependencies
-├── README.md            # Documentation
+bash
+Copy code <br>
+project/  <br>
+├── src/  <br>
+│   ├── app.js           # Entry point  <br>
+│   ├── controllers/     # Business logic  <br>
+│   ├── models/          # MongoDB schemas  <br>
+│   ├── routes/          # API endpoints  <br>
+│   ├── queues/          # Queue logic  <br>
+│   ├── middleware/      # Custom middleware  <br>
+├── tests/               # Unit tests  <br>
+├── uploads/             # Uploaded files  <br>
+├── .env                 # Environment variables  <br>
+├── package.json         # Project metadata and dependencies  <br>
+├── README.md            # Documentation  <br>
 Future Improvements
 Two-factor Authentication for enhanced security.
 Cloud Storage Integration (e.g., AWS S3, Google Cloud Storage).
