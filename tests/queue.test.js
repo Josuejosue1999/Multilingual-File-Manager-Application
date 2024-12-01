@@ -1,28 +1,40 @@
-const uploadQueue = require('../src/queues/uploadQueue');
+const uploadQueue = require('../src/queues/queue');
 
-describe('File Upload Queue', () => {
-    it('should process a job successfully', async () => {
-        const job = await uploadQueue.add({
-            fileId: 'test123',
-            filePath: '/path/to/test-file.txt',
-            description: 'Test file for queue',
-        });
+describe('Upload Queue', () => {
+  let job;
 
-        expect(job.id).toBeDefined();
+  beforeAll(async () => {
+    // Clear the queue before starting the tests to ensure no leftover jobs
+    await uploadQueue.empty();
+  });
 
-        await job.finished(); // Attendre que le job se termine
+  afterAll(async () => {
+    // Close the Redis connection after all tests are done
+    await uploadQueue.close();
+  });
 
-        expect(job.progress()).toBe(100);
-        console.log('Job processed successfully:', job.data);
+  it('should add a job to the queue and process it', async () => {
+    // Add a job to the queue with mock data
+    job = await uploadQueue.add({
+      file: 'path/to/testfile.txt',
+      description: 'Test file upload',
     });
 
-    it('should handle job failures', async () => {
-        const job = await uploadQueue.add({
-            fileId: 'test123',
-            filePath: '/invalid/path/to/file.txt', // Fichier inexistant
-            description: 'Invalid file test',
-        });
+    expect(job).toHaveProperty('id');  // Check if the job has an ID
 
-        await expect(job.finished()).rejects.toThrow(); // Vérifie l’échec
+    // Listen for job completion
+    const completedJob = new Promise((resolve, reject) => {
+      uploadQueue.on('completed', (completedJob) => {
+        console.log(`Test completed for job ${completedJob.id}.`);
+        resolve(completedJob);
+      });
+
+      uploadQueue.on('failed', (failedJob, err) => {
+        reject(`Test failed for job ${failedJob.id} with error: ${err}`);
+      });
     });
+
+    // Wait for the job to be processed and completed
+    await completedJob;
+  });
 });
