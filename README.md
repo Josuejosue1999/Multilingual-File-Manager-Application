@@ -1,17 +1,17 @@
-Multilingual File Manager API<br>
-Description<br>
+#Multilingual File Manager API
+##Description<br>
 The Multilingual File Manager API is a robust solution for managing files with multilingual support. It offers secure user authentication, file uploading, retrieval, and deletion. Built with flexibility in mind, this API supports multiple languages and provides CRUD operations for file management.<br>
 
-Features<br>
-User Authentication: Securely register and log in users with hashed passwords.<br>
-File Management:<br>
+##Features<br>
+###User Authentication: Securely register and log in users with hashed passwords.<br>
+###File Management:<br>
 Upload, retrieve, and delete files.<br>
 Validate file types and handle metadata.<br>
-Multilingual Support: Manage file operations and metadata in multiple languages.<br>
-Queuing System: Asynchronous file processing with status tracking.<br>
-CRUD Operations: Full support for creating, reading, updating, and deleting files.<br>
-Interactive API Documentation: Powered by Swagger for easy exploration of API endpoints.<br>
-API Endpoints<br>
+###Multilingual Support: Manage file operations and metadata in multiple languages.<br>
+###Queuing System: Asynchronous file processing with status tracking.<br>
+###CRUD Operations: Full support for creating, reading, updating, and deleting files.<br>
+###Interactive API Documentation: Powered by Swagger for easy exploration of API endpoints.<br>
+##API Endpoints<br>
 Authentication<br>
 Register a User<br>
 POST /api/auth/register<br>
@@ -32,10 +32,10 @@ Copy code<br>
   "username": "john_doe",<br>
   "password": "securepassword123"<br>
 }<br>
-File Management<br>
+##File Management<br>
 Get All Files<br>
 GET /api/files<br>
-Description: Retrieves a list of all files uploaded by users.<br>
+###Description: Retrieves a list of all files uploaded by users.<br>
 Upload a File<br>
 POST /api/files/upload<br>
 Request Body:<br>
@@ -62,7 +62,7 @@ Copy code<br>
 }<br>
 Get Queue Status<br>
 GET /api/files/queue/status<br>
-Description: Retrieves the status of the file processing queue.<br>
+##Description: Retrieves the status of the file processing queue.<br>
 Status Options:<br>
 waiting: Files waiting to be processed.<br>
 active: Files currently being processed.<br>
